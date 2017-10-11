@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+    "strconv"
 )
 
 type ShellCommand interface {
@@ -20,8 +21,7 @@ func NewShellCommand(c string) (ShellCommand, error) {
 	sc := &shellCommand{}
 
 	sc.cmd = exec.Command(os.Getenv("SHELL"), "-c", c)
-	sc.cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-
+	sc.cmd.SysProcAttr = &syscall.SysProcAttr{}
 	var (
 		stdout io.Reader
 		stderr io.Reader
@@ -44,7 +44,12 @@ func NewShellCommand(c string) (ShellCommand, error) {
 }
 
 func (sc *shellCommand) Close() error {
-	err := syscall.Kill(-sc.cmd.Process.Pid, syscall.SIGTERM)
-	sc.cmd.Wait()
-	return err
+	//err := syscall.Kill(-sc.cmd.Process.Pid, syscall.SIGTERM)
+    kill := exec.Command("TASKKILL", "/T", "/F", "/PID", strconv.Itoa(sc.cmd.Process.Pid))
+    kill.Stderr = os.Stderr
+    kill.Stdout = os.Stdout
+    kill.Run()
+    //return kill.Run()
+	//sc.cmd.Wait()
+	return nil
 }

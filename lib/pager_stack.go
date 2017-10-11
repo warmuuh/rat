@@ -106,7 +106,7 @@ func (ps *pagerStack) visiblePagers() []Pager {
 }
 
 func (ps *pagerStack) splitHorizontal() bool {
-	return ps.box.Width() > 180
+	return true //ps.box.Width() > 180
 }
 
 func (ps *pagerStack) layout() {

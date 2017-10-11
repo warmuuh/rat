@@ -41,7 +41,6 @@ type cmdPager struct {
 
 func NewCmdPager(modeNames string, cmd string, ctx Context) Pager {
 	p := &cmdPager{}
-
 	p.cmd = cmd
 	p.ctx = ctx
 
@@ -162,7 +161,7 @@ func (p *cmdPager) drawHeader() {
 }
 
 func (p *cmdPager) drawContent() {
-	p.contentBox.DrawStyledRune(1, p.cursorY-p.scrollOffsetY, NewStyledRune('▶', gTermStyles.Get(termbox.ColorRed, termbox.ColorDefault)))
+	p.contentBox.DrawStyledRune(1, p.cursorY-p.scrollOffsetY, NewStyledRune('>', gTermStyles.Get(termbox.ColorRed, termbox.ColorDefault)))
 
 	for y, line := range p.buffer.StyledLines(p.scrollOffsetY, p.contentBox.Height()) {
 		p.contentBox.DrawStyledRunes(3, y, []StyledRune(line))
